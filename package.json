@@ -1,0 +1,19 @@
+{
+  "name": "access-build",
+  "version": "0.0.1",
+  "description": "Access compiler",
+  "main": "compile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbellman/access-build.git"
+  },
+  "author": "Malcolm Bellman (malcolm.bellman@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mbellman/access-build/issues"
+  },
+  "homepage": "https://github.com/mbellman/access-build#readme"
+}
