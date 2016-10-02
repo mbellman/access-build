@@ -1,8 +1,11 @@
-#!usr/bin/env node
+#!/usr/bin/env node
 
 var A = require('./A.js');
 var File = require('./File.js');
 var Errors = require('./Errors.js');
+
+// @private [Array<String>] : A list of all files in the program's source directory
+var file_list;
 
 /**
  * compile( source, destination )
@@ -17,17 +20,19 @@ function compile (source, destination) {
 		return;
 	}
 
-	var files = File.scan(source);
+	destination = 'build/bundle.js';
 
-	A.eachInArray(files, function (file) {
-		var target = destination + '/' + File.getLowerPath(file, 1);
+	file_list = File.scan(source);
+
+	A.eachInArray(file_list, function (file) {
+		//var target = destination + '/' + File.getLowerPath(file, 1);
 
 		if (File.hasExtension(file, 'js')) {
-			console.log("Compiling: " + target);
-			File.write(target, "Hey : - )");
+			console.log("Compiling: " + file);
+			//File.write(target, "Hey : - )");
+			File.append(destination, "Hey : - )\n");
 		}
 	});
 }
 
-// Execution entry point
-compile(process.argv[2], process.argv[3]);
+module.exports = compile;

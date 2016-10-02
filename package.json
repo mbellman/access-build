@@ -1,8 +1,14 @@
 {
   "name": "access-build",
-  "version": "0.0.1",
   "description": "Access compiler",
-  "main": "compile.js",
+  "version": "0.0.3",
+  "author": "Malcolm Bellman (malcolm.bellman@gmail.com)",
+  "homepage": "https://github.com/mbellman/access-build#readme",
+  "license": "ISC",
+  "main": "main.js",
+  "engines": {
+  	"node": ">= 0.4.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,10 +16,10 @@
     "type": "git",
     "url": "git+https://github.com/mbellman/access-build.git"
   },
-  "author": "Malcolm Bellman (malcolm.bellman@gmail.com)",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/mbellman/access-build/issues"
   },
-  "homepage": "https://github.com/mbellman/access-build#readme"
+  "bin": {
+  	"access": "main.js"
+  }
 }
