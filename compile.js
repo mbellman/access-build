@@ -8,31 +8,71 @@ var Errors = require('./Errors.js');
 var file_list;
 
 /**
- * compile( source, destination )
+ * convert_flags( flags )
  *
- * Compiles an Access program contained within a source directory to a target directory
- * @param {source} [String] : The source file or directory containing the Access program source code
- * @param {destination} [String] : The destination file or directory to write the compiled JavaScript code into
+ * Returns an object containing semantic flags based on an array of flag strings from the process arguments
+ * @param {flags} [Array<String>] : The flags array
+ * @returns [Object{Boolean}]
+ * @private
  */
-function compile (source, destination) {
-	if (A.isUndefined(source) || A.isUndefined(destination)) {
-		console.log(Errors.SOURCE_OR_DESTINATION_UNDEFINED);
-		return;
-	}
+function convert_flags (flags) {
+	return {
+		MIRROR_MODE: A.containsAny(flags, '-m', '-mirror')
+	};
+}
 
-	destination = 'build/bundle.js';
-
+/**
+ * compile_multiple( source, destination, flags )
+ *
+ * Compiles multiple files from a source directory to a destination directory or file
+ * @param {source} [String] : The source directory supplied via compile()
+ * @param {destination} [String] : The destination file or directory supplied via compile()
+ * @param {flags} [Object{Boolean}] : The semantic flags object supplied via compile()
+ * @private
+ */
+function compile_multiple (source, destination, flags) {
 	file_list = File.scan(source);
 
+	if (File.isDirectoryLike(destination)) {
+		destination += '/bundle.js';
+	}
+
 	A.eachInArray(file_list, function (file) {
-		//var target = destination + '/' + File.getLowerPath(file, 1);
+		var mirroredFile = destination + '/' + File.getLowerPath(file, 1);
 
 		if (File.hasExtension(file, 'js')) {
 			console.log("Compiling: " + file);
-			//File.write(target, "Hey : - )");
-			File.append(destination, "Hey : - )\n");
+
+			if (flags.MIRROR_MODE) {
+				File.write(mirroredFile, "Hey : - )");
+			} else {
+				File.append(destination, "Hey : - )\n");
+			}
 		}
 	});
+}
+
+/**
+ * compile( source, destination, flags )
+ *
+ * Compiles an Access program contained within a source directory to a target directory
+ * @param {source} [String] : The source file or directory containing the Access program source code
+ * Optional @param {destination} [String] : The destination file or directory to write the compiled JavaScript code into
+ * Optional @param {flags} [Array<String>] : The compilation flags
+ * @export
+ */
+function compile (source, destination, flags) {
+	if (A.isUndefined(source)) {
+		console.log(Errors.SOURCE_UNDEFINED);
+		return;
+	}
+
+	flags = convert_flags(flags);
+	destination = A.default(destination, 'dist' + (flags.MIRROR_MODE ? '' : '/bundle.js'));
+
+	if (File.isDirectoryLike(source)) {
+		compile_multiple(source, destination, flags);
+	}
 }
 
 module.exports = compile;

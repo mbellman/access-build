@@ -5,8 +5,11 @@
  * @export
  */
 var Errors = {
-	// No source or target directory specified in compile options
-	SOURCE_OR_DESTINATION_UNDEFINED: "Please specify an input source and output destination.",
+	// Invalid process operation
+	INVALID_OPERATION: "Invalid operation: ",
+
+	// No source file or directory specified in compile options
+	SOURCE_UNDEFINED: "Please specify the source file or directory to compile from.",
 
 	// Unable to create a writable path via build_path() (see: File)
 	FILE_BUILD_DIRECTORY_PATH: "Error building file path: ",

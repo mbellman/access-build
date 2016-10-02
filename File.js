@@ -87,9 +87,7 @@ var File = {};
  * @returns [String]
  */
 File.getExtension = function (file) {
-	file = file.split('.');
-
-	return file[file.length - 1];
+	return A.lastInArray(file.split('.'));
 };
 
 /**
@@ -118,10 +116,8 @@ File.getDirectoryPath = function (file) {
 File.getLowerPath = function (file, depth) {
 	var directories = file.split('/');
 
-	depth++;
-
 	// Avoid splicing the actual file if we exceed {depth}
-	while (--depth && directories.length > 1) {
+	while (depth-- > 0 && directories.length > 1) {
 		directories.splice(0, 1);
 	}
 
@@ -175,12 +171,26 @@ File.exists = function (file) {
 /**
  * File.isDirectory( file )
  *
- * Determines whether or not a file is a directory (failure-safe)
+ * Determines whether or not a file is a directory
  * @param {file} [String] : The file to check
  * @returns [Boolean]
  */
 File.isDirectory = function (file) {
 	return File.exists(file) && fs.statSync(file).isDirectory();
+};
+
+/**
+ * File.isDirectory( file )
+ *
+ * Determines whether or not a file name resembles a directory
+ * @param {file} [String] : The file name to check
+ * @returns [Boolean]
+ */
+File.isDirectoryLike = function (file) {
+	var parts = file.split('/');
+	var last = A.lastInArray(parts);
+
+	return !A.has(last, '.');
 };
 
 /**
@@ -213,6 +223,10 @@ File.append = function (file, content) {
  * @returns [Array<String>]
  */
 File.scan = function (directory) {
+	if (!File.isDirectory(directory)) {
+		return [];
+	}
+
 	var list = [];
 	var files = fs.readdirSync(directory);
 
