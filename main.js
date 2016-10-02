@@ -9,15 +9,10 @@ var compile = require('./compile.js');
 var OPERATION_BUILD = 'build';
 var OPERATION_COMPILE = 'compile';
 
-var Flags = {
-	'-mirror': 'mirrorMode',
-	'-m': 'mirrorMode'
-};
-
 /**
  * splice_flags( args )
  *
- * Retrieves all flag-like arguments from the process arguments
+ * Retrieves and removes all flag-like arguments from the process arguments
  * @param {args} [Array<String>] : The array of process arguments
  * @returns [Array<String>]
  * @private
@@ -53,6 +48,7 @@ function main (args) {
 	switch (operation) {
 		case OPERATION_BUILD:
 		case OPERATION_COMPILE:
+			// args[0] = source, args[1] = destination
 			compile(args[0], args[1], flags);
 			break;
 		default:

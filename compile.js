@@ -17,6 +17,7 @@ var file_list;
  */
 function convert_flags (flags) {
 	return {
+		// Controls whether each .axs/.access file is compiled to its own equivalent .js file
 		MIRROR_MODE: A.containsAny(flags, '-m', '-mirror')
 	};
 }
@@ -32,10 +33,6 @@ function convert_flags (flags) {
  */
 function compile_multiple (source, destination, flags) {
 	file_list = File.scan(source);
-
-	if (File.isDirectoryLike(destination)) {
-		destination += '/bundle.js';
-	}
 
 	A.eachInArray(file_list, function (file) {
 		var mirroredFile = destination + '/' + File.getLowerPath(file, 1);
@@ -68,7 +65,11 @@ function compile (source, destination, flags) {
 	}
 
 	flags = convert_flags(flags);
-	destination = A.default(destination, 'dist' + (flags.MIRROR_MODE ? '' : '/bundle.js'));
+	destination = A.default(destination, 'dist');
+
+	if (File.isDirectoryLike(destination) && !flags.MIRROR_MODE) {
+		destination += '/bundle.js';
+	}
 
 	if (File.isDirectoryLike(source)) {
 		compile_multiple(source, destination, flags);
